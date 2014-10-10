@@ -60,3 +60,6 @@ Temporary Items
 *.exe
 *.out
 *.app
+
+# Dependencies generated
+*.d
