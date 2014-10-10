@@ -36,11 +36,14 @@ OBJDIR   = $(dir $(OBJ))
 
 .PHONY: all clean clobber directories
 
-$(BUILDDIR)/%.o: %.cpp $(HEADER)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
-$(BUILDDIR)/%.o: %.mm $(HEADER)
+$(BUILDDIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+	$(CXX) -MM -MT '$(BUILDDIR)/$*.o' $(CXXFLAGS) $< > $(BUILDDIR)/$*.d
+
+$(BUILDDIR)/%.o: %.mm
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+	$(CXX) -MM -MT '$(BUILDDIR)/$*.o' $(CXXFLAGS) $< > $(BUILDDIR)/$*.d
 
 all: directories main.exe
 
@@ -56,3 +59,4 @@ clean:
 clobber: clean
 	rm -rf *.exe
 
+-include $(OBJ:.o=.d)
